@@ -1,0 +1,103 @@
+<div style="width:1000px;margin-left: 10%;text-align: center;background-color: peru">
+  Task Details 
+  <button data-target="#addTask" data-toggle="modal" style="margin-left:500px;color: royalblue">Add Task</button>
+</div>
+<div class="modal" id="addTask" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form class="modal-body" [formGroup]="taskGroup">
+          <div class="form-group">
+            <label>Task Details</label>
+            <input  type="text" formControlName="taskdetails" id="taskdetails" value="">
+          </div>
+          <div class="form-group">
+            <label>Date Time</label>
+            <input  type="datetime-local" formControlName="datetime" id="datetime" value="">
+          </div> 
+          <div class="form-group">
+            <label>Quote Name</label>
+            <input  type="text" formControlName="quotename" id="quotename" value="">
+          </div>
+          <div class="form-group">
+            <label>Type Name</label>
+            <input  type="text" formControlName="typename" id="typename" value="">
+          </div>
+          <div class="form-group">
+            <label>Contact</label>
+            <input  type="text" formControlName="contact" id="contact" value="">
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="addTask()">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<br>
+<!-- <div style="width:1000px;margin-left: 10%;text-align: center;">
+    <div style="display: inline" > 
+      Show <select [(ngModel)]="selected" >
+      <option selected>10</option>
+      <option>20</option>
+      <option>50</option>
+     </select> Entries
+  </div>
+  <div style="display:inline;margin-left: 150px">
+    Order By: <select style="margin-right:10px">
+      <option>Contact Name</option>
+      <option>Tast Type</option>
+      <option>Due Date</option>
+      <option>Quote Type</option>
+    </select>
+    Descending: <input type="checkbox" > 
+    Search: <input type="text">
+  </div>
+ </div> -->
+<div style="width:1000px;margin-left: 10%">
+    Rows<select [(ngModel)]="selected" >
+        <option selected>10</option>
+        <option>20</option>
+        <option>50</option></select>
+    <input  style="width:300px;margin-left: 300px" type="text" name="search" [(ngModel)]="filter" placeholder="Search">      
+</div>
+<br>
+<div>
+<table  class="row-border hover" style="width:1000px;margin-left: 10%;text-align: center">
+  <thead><tr>
+    <th (click)="sort('ID')">ID<span class="glyphicon sort-icon" *ngIf="key =='ID'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th (click)="sort('Task_Details')">Task Details<span class="glyphicon sort-icon" *ngIf="key =='Task_Details'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th (click)="sort('Due_Date')">Due_Date<span class="glyphicon sort-icon" *ngIf="key =='Due_Date'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th (click)="sort('Contact')">Contact<span class="glyphicon sort-icon" *ngIf="key =='Contact'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th (click)="sort('Quote_Name')">Quote Name<span class="glyphicon sort-icon" *ngIf="key =='Quote_Name'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th (click)="sort('TaskType_Name')">Task Type<span class="glyphicon sort-icon" *ngIf="key =='TaskType_Name'" [ngClass]="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+   <tr *ngFor="let user of user$ | orderBy:key :reverse | filter:filter|paginate: { itemsPerPage: selected, currentPage: p };" >
+     <td>{{user.ID}}</td>
+    <td *ngIf='editset'>{{user.Task_Details}}</td>
+    <td *ngIf='updateset'><input #taskdetails type="text" name="taskdetails" id="taskdetails" (blur)="update(user.ID,taskdetails.value); taskdetails.value=''"></td>
+    <td>{{user.Due_Date}}</td>
+    <td>{{user.Contact}}</td>
+    <td>{{user.Quote_Name}}</td>
+    <td>{{user.TaskType_Name}}</td>
+    <td> <button *ngIf="editset" class="fas fa-edit" style="background:transparent;" (click)="edit(user.ID)" ></button><button *ngIf="updateset" class="fas " style="background:transparent;" (click)="update(user.ID,taskdetails.value)" ></button> <button class="fas fa-trash" style="background:transparent;" (click)="delete(user.ID)"></button></td>
+  </tr>
+  </tbody>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</table>
+</div>
